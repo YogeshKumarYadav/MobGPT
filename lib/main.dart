@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobgpt/providers/chat_provider.dart';
 import 'package:mobgpt/providers/models_providers.dart';
 import 'package:mobgpt/screens/chat_screen.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => ModelsProvider()
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ChatProvider()
         )
       ],
       child: MaterialApp(

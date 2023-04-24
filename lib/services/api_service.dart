@@ -21,7 +21,7 @@ class ApiService {
     } catch (e) {
       log("Error: $e");
       rethrow;
-    }  
+    }
   }
 
   static Future<List<ChatModel>> sendMessage({
@@ -29,6 +29,7 @@ class ApiService {
     required String model,
   }) async {
     try {
+      log(message);
       var response = await http.post(Uri.parse("$BASE_URL/chat/completions"),
           headers: {
             'Authorization': 'Bearer $API_KEY',
@@ -41,7 +42,6 @@ class ApiService {
             ]
           }));
       Map responsejson = jsonDecode(response.body);
-      log(responsejson['choices'][0]['message']['content'].toString());
       if (responsejson['error'] != null) {
         throw HttpException(responsejson['error']['message']);
       }
@@ -49,11 +49,10 @@ class ApiService {
       if (responsejson['choices'].length > 0) {
         log(responsejson['choices'][0]['message']['content']);
         chatList = List.generate(
-          responsejson['choices'].length,
-          (index) => ChatModel(
-            message: responsejson['choices'][0]['message']['content'], chatIndex: 1
-          )
-        );
+            responsejson['choices'].length,
+            (index) => ChatModel(
+                message: responsejson['choices'][0]['message']['content'],
+                chatIndex: 1));
       }
       return chatList;
     } catch (e) {

@@ -10,6 +10,7 @@ import 'package:mobgpt/widgets/chat_widget.dart';
 import 'package:mobgpt/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
 import '../models/chat_model.dart';
+import '../providers/chat_provider.dart';
 import '../providers/models_providers.dart';
 import '../services/services.dart';
 
@@ -19,7 +20,7 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-List<ChatModel> chatlist = [];
+// List<ChatModel> chatlist = [];
 
 class _ChatScreenState extends State<ChatScreen> {
   bool _isTyping = false;
@@ -46,6 +47,8 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final curprovider = Provider.of<ModelsProvider>(context);
+    final chatprovider = Provider.of<ChatProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
@@ -70,11 +73,11 @@ class _ChatScreenState extends State<ChatScreen> {
           Flexible(
             child: ListView.builder(
                 controller: listScrollController,
-                itemCount: chatlist.length,
+                itemCount: chatprovider.getChatList.length,
                 itemBuilder: (context, index) {
                   return ChatWidget(
-                    message: chatlist[index].message.toString(),
-                    index: chatlist[index].chatIndex,
+                    message: chatprovider.getChatList[index].message.toString(),
+                    index: chatprovider.getChatList[index].chatIndex,
                   );
                 }),
           ),
@@ -91,12 +94,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
+                        child: TextField(
                       focusNode: focusnode,
                       style: const TextStyle(color: Colors.white),
                       controller: textEditingController,
                       onSubmitted: (value) async {
-                        await sendMSG(curprovider: curprovider);
+                        await sendMSG(
+                            curprovider: curprovider,
+                            chatprovider: chatprovider);
                       },
                       decoration: const InputDecoration.collapsed(
                           hintText: "How can I help you!",
@@ -104,7 +109,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     )),
                     IconButton(
                         onPressed: () async {
-                          await sendMSG(curprovider: curprovider);
+                          await sendMSG(
+                              curprovider: curprovider,
+                              chatprovider: chatprovider);
                         },
                         icon: const Icon(
                           Icons.send,
@@ -125,20 +132,39 @@ class _ChatScreenState extends State<ChatScreen> {
         curve: Curves.easeOut);
   }
 
-  Future<void> sendMSG({required ModelsProvider curprovider}) async {
+  Future<void> sendMSG(
+      {required ModelsProvider curprovider,
+      required ChatProvider chatprovider}) async {
+    if (textEditingController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: TextWidget(
+          label: "Please type a message",
+        ),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+    if (_isTyping) {
+      return;
+    }
     try {
       final msg = textEditingController.text;
       setState(() {
         _isTyping = true;
-        chatlist
-            .add(ChatModel(message: textEditingController.text, chatIndex: 0));
+        chatprovider.addUserChat(message: msg);
         textEditingController.clear();
         focusnode.unfocus();
       });
-      chatlist.addAll(await ApiService.sendMessage(
-          message: msg, model: curprovider.getmodel));
+      await chatprovider.sendMessage(
+          message: msg, model: curprovider.getmodel);
     } catch (e) {
       log("Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: TextWidget(
+          label: e.toString(),
+        ),
+        backgroundColor: Colors.red,
+      ));
     } finally {
       setState(() {
         scrollToEnd();
