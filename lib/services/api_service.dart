@@ -29,25 +29,29 @@ class ApiService {
     required String model,
   }) async {
     try {
-      var response = await http.post(Uri.parse("$BASE_URL/completions"),
+      var response = await http.post(Uri.parse("$BASE_URL/chat/completions"),
           headers: {
             'Authorization': 'Bearer $API_KEY',
             "Content-Type": "application/json"
           },
           body: jsonEncode({
-            "model": model,
-            "prompt": message,
-            "max_tokens": 4000,
+            "model": "gpt-3.5-turbo",
+            "messages": [
+              {"role": "user", "content": message}
+            ]
           }));
       Map responsejson = jsonDecode(response.body);
+      log(responsejson['choices'][0]['message']['content'].toString());
       if (responsejson['error'] != null) {
         throw HttpException(responsejson['error']['message']);
       }
-
       List<ChatModel> chatList = [];
       if (responsejson['choices'].length > 0) {
-        log(responsejson['choices'][0]['text']);
-        chatList = List.generate(responsejson['choices'].length, (index) => ChatModel(message: responsejson['choices'][0]['text'], chatIndex: 1));
+        log(responsejson['choices'][0]['message']['content']);
+        chatList = List.generate(
+            responsejson['choices'].length,
+            (index) => ChatModel(
+                message: responsejson['choices'][0]['message']['content'], chatIndex: 1));
       }
       return chatList;
     } catch (e) {
