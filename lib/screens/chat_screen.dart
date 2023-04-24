@@ -20,8 +20,6 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-// List<ChatModel> chatlist = [];
-
 class _ChatScreenState extends State<ChatScreen> {
   bool _isTyping = false;
   late ScrollController listScrollController;
@@ -76,8 +74,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemCount: chatprovider.getChatList.length,
                 itemBuilder: (context, index) {
                   return ChatWidget(
-                    message: chatprovider.getChatList[index].message.toString(),
-                    index: chatprovider.getChatList[index].chatIndex,
+                    role: chatprovider.getChatList[index].role,
+                    content: chatprovider.getChatList[index].content.toString(),
+                    index: index,
+                    size: chatprovider.getChatList.length
                   );
                 }),
           ),
@@ -90,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Material(
               color: cardColor,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                 child: Row(
                   children: [
                     Expanded(
@@ -105,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       },
                       decoration: const InputDecoration.collapsed(
                           hintText: "How can I help you!",
-                          hintStyle: TextStyle(color: Colors.white)),
+                          hintStyle: TextStyle(color: Colors.white38)),
                     )),
                     IconButton(
                         onPressed: () async {
@@ -155,8 +155,7 @@ class _ChatScreenState extends State<ChatScreen> {
         textEditingController.clear();
         focusnode.unfocus();
       });
-      await chatprovider.sendMessage(
-          message: msg, model: curprovider.getmodel);
+      await chatprovider.sendMessage(message: msg, model: curprovider.getmodel);
     } catch (e) {
       log("Error: $e");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

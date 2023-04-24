@@ -9,7 +9,7 @@ class ChatProvider with ChangeNotifier {
   }
 
   void addUserChat({required String message}) {
-    chatlist.add(ChatModel(message: message, chatIndex: 0));
+    chatlist.add(ChatModel(role: "user", content: message));
     notifyListeners();
   }
 
