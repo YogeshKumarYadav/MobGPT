@@ -24,7 +24,7 @@ List<ChatModel> chatlist = [];
 
 class _ChatScreenState extends State<ChatScreen> {
   bool _isTyping = false;
-  late TextEditingController? textEditingController;
+  late TextEditingController textEditingController;
   late FocusNode focusnode;
 
   @override
@@ -117,15 +117,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> sendMSG({required ModelsProvider curprovider}) async {
     try {
+      final msg = textEditingController.text;
       setState(() {
         _isTyping = true;
         chatlist
-            .add(ChatModel(message: textEditingController!.text, chatIndex: 0));
-        textEditingController?.clear();
+            .add(ChatModel(message: textEditingController.text, chatIndex: 0));
+        textEditingController.clear();
         focusnode.unfocus();
       });
       chatlist.addAll(await ApiService.sendMessage(
-          message: textEditingController!.text, model: curprovider.getmodel));
+          message: msg, model: curprovider.getmodel));
     } catch (e) {
       log("Error: $e");
     } finally {
