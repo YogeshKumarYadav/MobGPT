@@ -3,10 +3,9 @@ class ChatModel {
   final int chatIndex;
 
   ChatModel({required this.message, required this.chatIndex});
-
-  
   factory ChatModel.fromJson(Map<String, dynamic> json) =>
-      ChatModel(message: json['message'], chatIndex: json['chatIndex']);
-
-
+      ChatModel(
+        message: json['message'],
+        chatIndex: json['chatIndex']
+      );
 }

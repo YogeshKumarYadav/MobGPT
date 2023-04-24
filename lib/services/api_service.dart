@@ -21,7 +21,7 @@ class ApiService {
     } catch (e) {
       log("Error: $e");
       rethrow;
-    }
+    }  
   }
 
   static Future<List<ChatModel>> sendMessage({
@@ -49,9 +49,11 @@ class ApiService {
       if (responsejson['choices'].length > 0) {
         log(responsejson['choices'][0]['message']['content']);
         chatList = List.generate(
-            responsejson['choices'].length,
-            (index) => ChatModel(
-                message: responsejson['choices'][0]['message']['content'], chatIndex: 1));
+          responsejson['choices'].length,
+          (index) => ChatModel(
+            message: responsejson['choices'][0]['message']['content'], chatIndex: 1
+          )
+        );
       }
       return chatList;
     } catch (e) {

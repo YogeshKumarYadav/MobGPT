@@ -9,7 +9,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mobgpt/widgets/chat_widget.dart';
 import 'package:mobgpt/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
-
 import '../models/chat_model.dart';
 import '../providers/models_providers.dart';
 import '../services/services.dart';
@@ -24,11 +23,13 @@ List<ChatModel> chatlist = [];
 
 class _ChatScreenState extends State<ChatScreen> {
   bool _isTyping = false;
+  late ScrollController listScrollController;
   late TextEditingController textEditingController;
   late FocusNode focusnode;
 
   @override
   void initState() {
+    listScrollController = ScrollController();
     textEditingController = TextEditingController();
     focusnode = FocusNode();
     super.initState();
@@ -36,7 +37,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
-    textEditingController!.dispose();
+    listScrollController.dispose();
+    textEditingController.dispose();
     focusnode.dispose();
     super.dispose();
   }
@@ -67,6 +69,7 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Flexible(
             child: ListView.builder(
+                controller: listScrollController,
                 itemCount: chatlist.length,
                 itemBuilder: (context, index) {
                   return ChatWidget(
@@ -88,7 +91,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Row(
                   children: [
                     Expanded(
-                        child: TextField(
+                      child: TextField(
                       focusNode: focusnode,
                       style: const TextStyle(color: Colors.white),
                       controller: textEditingController,
@@ -115,6 +118,13 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  void scrollToEnd() {
+    listScrollController.animateTo(
+        listScrollController.position.maxScrollExtent,
+        duration: const Duration(seconds: 2),
+        curve: Curves.easeOut);
+  }
+
   Future<void> sendMSG({required ModelsProvider curprovider}) async {
     try {
       final msg = textEditingController.text;
@@ -131,6 +141,7 @@ class _ChatScreenState extends State<ChatScreen> {
       log("Error: $e");
     } finally {
       setState(() {
+        scrollToEnd();
         _isTyping = false;
       });
     }
