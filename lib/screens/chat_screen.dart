@@ -11,7 +11,7 @@ import 'package:mobgpt/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
 import '../models/chat_model.dart';
 import '../providers/chat_provider.dart';
-import '../providers/models_providers.dart';
+import '../providers/modes_providers.dart';
 import '../services/services.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -44,7 +44,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final curprovider = Provider.of<ModelsProvider>(context);
     final chatprovider = Provider.of<ChatProvider>(context);
 
     return Scaffold(
@@ -53,11 +52,11 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(AssetsManager.openaiImage)),
-        title: const Text("MobGPT"),
+        title: const Text("MobGPT - Conversation"),
         actions: [
           IconButton(
               onPressed: () async {
-                await Services.showModelSheet(context: context);
+                await Services.showModeSheet(context: context);
               },
               icon: const Icon(
                 Icons.more_vert_rounded,
@@ -100,7 +99,6 @@ class _ChatScreenState extends State<ChatScreen> {
                       controller: textEditingController,
                       onSubmitted: (value) async {
                         await sendMSG(
-                            curprovider: curprovider,
                             chatprovider: chatprovider);
                       },
                       decoration: const InputDecoration.collapsed(
@@ -110,7 +108,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     IconButton(
                         onPressed: () async {
                           await sendMSG(
-                              curprovider: curprovider,
                               chatprovider: chatprovider);
                         },
                         icon: const Icon(
@@ -133,8 +130,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> sendMSG(
-      {required ModelsProvider curprovider,
-      required ChatProvider chatprovider}) async {
+      {required ChatProvider chatprovider}) async {
     if (textEditingController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: TextWidget(
@@ -155,7 +151,7 @@ class _ChatScreenState extends State<ChatScreen> {
         textEditingController.clear();
         focusnode.unfocus();
       });
-      await chatprovider.sendMessage(message: msg, model: curprovider.getmodel);
+      await chatprovider.sendMessage(message: msg);
     } catch (e) {
       log("Error: $e");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

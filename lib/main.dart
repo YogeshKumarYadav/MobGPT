@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobgpt/providers/chat_provider.dart';
-import 'package:mobgpt/providers/models_providers.dart';
+import 'package:mobgpt/providers/edit_provider.dart';
+import 'package:mobgpt/providers/modes_providers.dart';
 import 'package:mobgpt/screens/chat_screen.dart';
+import 'package:mobgpt/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'constants/constants.dart';
 
@@ -18,7 +20,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ModelsProvider()
+          create: (_) => ModesProvider()
+        ),
+        ChangeNotifierProvider(
+          create: (_) => EditProvider()
         ),
         ChangeNotifierProvider(
           create: (_) => ChatProvider()
@@ -33,7 +38,8 @@ class MyApp extends StatelessWidget {
             color: cardColor
           )
         ),
-        home: const ChatScreen(),
+        home: 
+          const ChatScreen(),
         )
     );
   }

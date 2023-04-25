@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-
 import '../constants/constants.dart';
 import '../widgets/dropdown_widget.dart';
 import '../widgets/text_widget.dart';
 
 class Services {
-  static Future<void> showModelSheet({required BuildContext context}) async {
+  static Future<void> showModeSheet({required BuildContext context}) async {
     await showModalBottomSheet(
       backgroundColor: scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.vertical(top: Radius.circular(20))),
+        borderRadius:
+          BorderRadius.vertical(
+            top: Radius.circular(20)
+          )
+      ),
       context: context,
       builder: (context) {
         return Padding(
@@ -25,7 +27,7 @@ class Services {
               )),
               Flexible(
                 flex: 2,
-                child: ModelDropDown()),
+                child: ModeDropDown()),
             ],
           ),
         );

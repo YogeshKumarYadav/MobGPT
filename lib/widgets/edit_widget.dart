@@ -7,14 +7,16 @@ import 'package:mobgpt/constants/constants.dart';
 import 'package:mobgpt/widgets/text_widget.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
-class ChatWidget extends StatelessWidget {
-  const ChatWidget(
+class EditWidget extends StatelessWidget {
+  const EditWidget(
       {super.key,
       required this.role,
       required this.content,
+      required this.instruction,
       required this.index,
       required this.size});
   final String content;
+  final String instruction;
   final String role;
   final int index;
   final int size;
@@ -30,8 +32,8 @@ class ChatWidget extends StatelessWidget {
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Image.asset(
                 role == "user"
-                  ? AssetsManager.userImage
-                  : AssetsManager.gptImage,
+                    ? AssetsManager.userImage
+                    : AssetsManager.gptImage,
                 height: 30,
                 width: 30,
               ),
@@ -40,33 +42,29 @@ class ChatWidget extends StatelessWidget {
               ),
               Expanded(
                 child: role == "user"
-                  ? Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 5, 20, 5),
-                      child: TextWidget(label: content))
-                  // : index == size - 1
-                  //     ? Padding(
-                  //         padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                  //         child: AnimatedTextKit(
-                  //             isRepeatingAnimation: false,
-                  //             repeatForever: false,
-                  //             displayFullTextOnTap: true,
-                  //             totalRepeatCount: 1,
-                  //             animatedTexts: [
-                  //               TypewriterAnimatedText(
-                  //                 content.trim(),
-                  //                 textStyle: const TextStyle(
-                  //                   color: Colors.white,
-                  //                   fontSize: 16,
-                  //                   fontWeight: FontWeight.w700,
-                  //                 ),
-                  //                 speed: const Duration(milliseconds: 40),
-                  //               )
-                  //             ]),
-                  //       )
+                    ? Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 5, 20, 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                          const TextWidget(label: "Input:", fontSize: 18),
+                          TextWidget(label: content),
+                          const SizedBox(height: 10),
+                          const TextWidget(label: "Instructions:", fontSize: 18),
+                          TextWidget(label: instruction)
+                        ],)
+                      ) 
+                    
                     : Padding(
                         padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: TextWidget(label: content))),
-                role == "user"
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                          TextWidget(label: content)
+                        ],)
+                      )
+                    ),
+              role == "user"
                   ? const SizedBox.shrink()
                   : IconButton(
                       alignment: Alignment.topRight,
@@ -77,8 +75,7 @@ class ChatWidget extends StatelessWidget {
                         Icons.copy_rounded,
                         color: Colors.white,
                         // size: 25,
-                      )
-                    ),
+                      )),
             ]),
           ),
         )

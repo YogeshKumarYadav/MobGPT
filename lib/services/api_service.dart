@@ -5,30 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:mobgpt/constants/api_constants.dart';
 import 'package:mobgpt/models/chat_model.dart';
 import 'package:provider/provider.dart';
-import '../models/models_model.dart';
+import '../models/edit_model.dart';
 import '../providers/chat_provider.dart';
 
 class ApiService {
   static List<Map> allChats = [];
 
-  static Future<List<ModelsModel>> getModels() async {
-    try {
-      var response = await http.get(Uri.parse("$BASE_URL/models"),
-          headers: {'Authorization': 'Bearer $API_KEY'});
-      Map responsejson = jsonDecode(response.body);
-      if (responsejson['error'] != null) {
-        throw HttpException(responsejson['error']['message']);
-      }
-      return ModelsModel.modelsResp(responsejson['data']);
-    } catch (e) {
-      log("Error: $e");
-      rethrow;
-    }
-  }
-
   static Future<List<ChatModel>> sendMessage({
     required String message,
-    required String model,
   }) async {
     try {
       log(message);
@@ -54,9 +38,43 @@ class ApiService {
             responsejson['choices'].length,
             (index) => ChatModel(
                 content: responsejson['choices'][0]['message']['content'],
-                role: "assistant"));
+                role: "assistant"
+              )
+          );
       }
       return chatList;
+    } catch (e) {
+      log("Error: $e");
+      rethrow;
+    }
+  }
+
+  static Future<List<EditModel>> sendEditMessage({
+    required String message, required String instruction
+  }) async {
+    try {
+      log(message);
+      var response = await http.post(Uri.parse("$BASE_URL/edits"),
+          headers: {
+            'Authorization': 'Bearer $API_KEY',
+            "Content-Type": "application/json"
+          },
+          body: jsonEncode({"model": "text-davinci-edit-001", "input": message, "instruction": instruction}));
+      Map responsejson = jsonDecode(response.body);
+      if (responsejson['error'] != null) {
+        throw HttpException(responsejson['error']['message']);
+      }
+      List<EditModel> editList = [];
+      if (responsejson['choices'].length > 0) {
+        log(responsejson['choices'][0]['text']);
+        editList = List.generate(
+            responsejson['choices'].length,
+            (index) => EditModel(
+                instruction: instruction,
+                input: responsejson['choices'][0]['text'],
+                role: "assistant"));
+      }
+      return editList;
     } catch (e) {
       log("Error: $e");
       rethrow;

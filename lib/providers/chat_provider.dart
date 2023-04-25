@@ -13,8 +13,8 @@ class ChatProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> sendMessage({required String message, required String model}) async {
-    chatlist.addAll(await ApiService.sendMessage(message: message, model: model));
+  Future<void> sendMessage({required String message}) async {
+    chatlist.addAll(await ApiService.sendMessage(message: message));
     notifyListeners();
   }
 }
