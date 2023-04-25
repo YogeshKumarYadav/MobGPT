@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:mobgpt/services/assets_manager.dart';
@@ -39,43 +40,44 @@ class ChatWidget extends StatelessWidget {
               ),
               Expanded(
                   child: role == "user"
-                      ? TextWidget(label: content)
-                      : index == size-1
-                        ? AnimatedTextKit(
-                          isRepeatingAnimation: false,
-                          repeatForever: false,
-                          displayFullTextOnTap: true,
-                          totalRepeatCount: 1,
-                          animatedTexts: [
-                              TypewriterAnimatedText(
-                                content.trim(),
-                                textStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                speed: const Duration(milliseconds: 40),
-                              )
-                            ])
-                        : TextWidget(label: content)
-              ),
-              // role == "user"
-              //     ? const SizedBox.shrink()
-              //     : Row(
-              //         mainAxisAlignment: MainAxisAlignment.end,
-              //         mainAxisSize: MainAxisSize.min,
-              //         children: const [
-              //           Icon(
-              //             Icons.thumb_up_alt_outlined,
-              //             color: Colors.white,
-              //           ),
-              //           SizedBox(width: 5),
-              //           Icon(
-              //             Icons.thumb_down_alt_outlined,
-              //             color: Colors.white,
-              //           )
-              //         ],
-              //       )
+                      ? Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 5, 20, 0),
+                          child: TextWidget(label: content))
+                      // : index == size - 1
+                      //     ? Padding(
+                      //         padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                      //         child: AnimatedTextKit(
+                      //             isRepeatingAnimation: false,
+                      //             repeatForever: false,
+                      //             displayFullTextOnTap: true,
+                      //             totalRepeatCount: 1,
+                      //             animatedTexts: [
+                      //               TypewriterAnimatedText(
+                      //                 content.trim(),
+                      //                 textStyle: const TextStyle(
+                      //                   color: Colors.white,
+                      //                   fontSize: 16,
+                      //                   fontWeight: FontWeight.w700,
+                      //                 ),
+                      //                 speed: const Duration(milliseconds: 40),
+                      //               )
+                      //             ]),
+                      //       )
+                        : Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: TextWidget(label: content))),
+                role == "user"
+                  ? const SizedBox.shrink()
+                  : IconButton(
+                        alignment: Alignment.topRight,
+                        onPressed: () {
+                          Clipboard.setData(ClipboardData(text: content));
+                        },
+                        icon: const Icon(
+                          Icons.copy_rounded,
+                          color: Colors.white,
+                        )
+                      ),
             ]),
           ),
         )

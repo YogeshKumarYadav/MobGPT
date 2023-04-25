@@ -4,7 +4,7 @@ class TextWidget extends StatelessWidget {
   const TextWidget(
       {Key? key,
       required this.label,
-      this.fontSize = 18,
+      this.fontSize = 15,
       this.color,
       this.fontWeight})
       : super(key: key);
@@ -15,7 +15,7 @@ class TextWidget extends StatelessWidget {
   final FontWeight? fontWeight;
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return SelectableText(
       label,
       style: TextStyle(
         color: color ?? Colors.white,
