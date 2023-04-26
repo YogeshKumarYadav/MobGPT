@@ -21,14 +21,16 @@ class _EditScreenState extends State<EditScreen> {
   late TextEditingController textEditingControllerText;
   late TextEditingController textEditingControllerInst;
 
-  late FocusNode focusnode;
+  late FocusNode focusnodeText;
+  late FocusNode focusnodeInst;
 
   @override
   void initState() {
     listScrollController = ScrollController();
     textEditingControllerText = TextEditingController();
     textEditingControllerInst = TextEditingController();
-    focusnode = FocusNode();
+    focusnodeText = FocusNode();
+    focusnodeInst = FocusNode();
     super.initState();
   }
 
@@ -37,7 +39,8 @@ class _EditScreenState extends State<EditScreen> {
     listScrollController.dispose();
     textEditingControllerText.dispose();
     textEditingControllerInst.dispose();
-    focusnode.dispose();
+    focusnodeText.dispose();
+    focusnodeInst.dispose();
     super.dispose();
   }
 
@@ -97,7 +100,7 @@ class _EditScreenState extends State<EditScreen> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                             child: TextField(
-                              // focusNode: focusnode,
+                              focusNode: focusnodeText,
                               style: const TextStyle(color: Colors.white),
                               controller: textEditingControllerText,
                               onSubmitted: (value) async {
@@ -112,7 +115,7 @@ class _EditScreenState extends State<EditScreen> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: TextField(
-                              // focusNode: focusnode,
+                              focusNode: focusnodeInst,
                                 style: const TextStyle(color: Colors.white),
                                 controller: textEditingControllerInst,
                                 onSubmitted: (value) async {
@@ -171,7 +174,8 @@ class _EditScreenState extends State<EditScreen> {
         editprovider.addUserChat(message: txt, instruction: ins);
         textEditingControllerText.clear();
         textEditingControllerInst.clear();
-        focusnode.unfocus();
+        focusnodeText.unfocus();
+        focusnodeInst.unfocus();
       });
       await editprovider.sendMessage(message: txt, instruction: ins);
     } catch (e) {

@@ -17,19 +17,45 @@ class Services {
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(18.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Flexible(
-                child: TextWidget(
-                label: "Choose Model:",
-                fontSize: 16,
-              )),
-              Flexible(
-                flex: 2,
-                child: ModeDropDown()),
-            ],
-          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Flexible(
+                    child: Text(
+                      "Choose Mode", 
+                      style: TextStyle(
+                        fontSize: 16, 
+                        color: Colors.white
+                      )
+                    )
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: ModeDropDown()),
+                ],
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.black,
+                  elevation: 2, 
+                  shadowColor: Colors.grey,
+                ),
+                onPressed: () {},
+                child: const Text(
+                  "Logout", 
+                  style: TextStyle(
+                    fontSize: 15, 
+                    color: Colors.white
+                  )
+                )
+              )
+            ]
+          )
         );
       }
     );
