@@ -6,6 +6,7 @@ import 'package:mobgpt/constants/api_constants.dart';
 import 'package:mobgpt/models/chat_model.dart';
 import 'package:provider/provider.dart';
 import '../models/edit_model.dart';
+import '../models/image_model.dart';
 import '../providers/chat_provider.dart';
 
 class ApiService {
@@ -66,7 +67,6 @@ class ApiService {
       if (responsejson['error'] != null) {
         throw HttpException(responsejson['error']['message']);
       }
-      utf8.decode(response.bodyBytes);
       List<EditModel> editList = [];
       if (responsejson['choices'].length > 0) {
         log(utf8convert(responsejson['choices'][0]['text']));
@@ -78,6 +78,38 @@ class ApiService {
                 role: "assistant"));
       }
       return editList;
+    } catch (e) {
+      log("Error: $e");
+      rethrow;
+    }
+  }
+
+  static Future<List<ImageModel>> sendImageRequest({
+    required String message, required String size
+  }) async {
+    try {
+      log(message);
+      var response = await http.post(Uri.parse("$BASE_URL/images/generations"),
+          headers: {
+            'Authorization': 'Bearer $API_KEY',
+            "Content-Type": "application/json"
+          },
+          body: jsonEncode({"prompt": message, "n": 1, "size": size}));
+      Map responsejson = jsonDecode(response.body);
+      if (responsejson['error'] != null) {
+        throw HttpException(responsejson['error']['message']);
+      }
+      List<ImageModel> imageList = [];
+      if (responsejson['data'].length > 0) {
+        log(responsejson['data'][0]['url']);
+        imageList = List.generate(
+            responsejson['data'].length,
+            (index) => ImageModel(
+              content: responsejson['data'][index]['url'],
+              role: "assistant")
+            );
+      }
+      return imageList;
     } catch (e) {
       log("Error: $e");
       rethrow;

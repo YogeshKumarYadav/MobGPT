@@ -5,7 +5,7 @@ class ChatModel {
   ChatModel({required this.role, required this.content});
   factory ChatModel.fromJson(Map<String, dynamic> json) =>
       ChatModel(
-        role: json['message'],
-        content: json['chatIndex']
+        role: json['chatIndex'],
+        content: json['message']
       );
 }

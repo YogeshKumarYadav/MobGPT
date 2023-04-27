@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:mobgpt/screens/Image_screen.dart';
 import 'package:mobgpt/screens/chat_screen.dart';
 import 'package:mobgpt/screens/edit_screen.dart';
 import 'package:mobgpt/widgets/text_widget.dart';
@@ -38,8 +39,10 @@ class _ModeDropDownState extends State<ModeDropDown> {
                       value: modes[index],
                       child: Text(modes[index],
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 15)),
-                    )),
+                              color: Colors.white, fontSize: 15)
+                              ),
+                    )
+                  ),
             value: currentMode,
             onChanged: (value) {
               modesprovider.setCurrentMode(value.toString());              
@@ -51,6 +54,9 @@ class _ModeDropDownState extends State<ModeDropDown> {
               }
               if(currentMode == "Customize Input") {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const EditScreen()));
+              } 
+              if(currentMode == "Generate AI Image") {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ImageScreen()));
               }              
             }));
   }

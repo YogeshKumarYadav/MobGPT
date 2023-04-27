@@ -7,17 +7,13 @@ import 'package:mobgpt/constants/constants.dart';
 import 'package:mobgpt/widgets/text_widget.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
-class ChatWidget extends StatelessWidget {
-  const ChatWidget(
+class ImageWidget extends StatelessWidget {
+  const ImageWidget(
       {super.key,
       required this.role,
-      required this.content,
-      required this.index,
-      required this.size});
+      required this.content});
   final String content;
   final String role;
-  final int index;
-  final int size;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +35,14 @@ class ChatWidget extends StatelessWidget {
                 width: 8,
               ),
               Expanded(
-                child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                      child: TextWidget(label: content))),
+                child: role == "user"
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 5, 20, 5),
+                      child: TextWidget(label: content))
+                    : Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Image.network(content))
+                ),
                 role == "user"
                   ? const SizedBox.shrink()
                   : IconButton(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobgpt/providers/chat_provider.dart';
 import 'package:mobgpt/providers/edit_provider.dart';
+import 'package:mobgpt/providers/image_provider.dart';
 import 'package:mobgpt/providers/mode_provider.dart';
 import 'package:mobgpt/screens/chat_screen.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => ChatProvider()
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AiImageProvider()
         )
       ],
       child: MaterialApp(
