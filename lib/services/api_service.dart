@@ -29,18 +29,17 @@ class ApiService {
       }
       allChats.add({
         "role": "assistant",
-        "content": responsejson['choices'][0]['message']['content']
+        "content": utf8convert(responsejson['choices'][0]['message']['content'])
       });
       List<ChatModel> chatList = [];
       if (responsejson['choices'].length > 0) {
-        log(responsejson['choices'][0]['message']['content']);
+        log(utf8convert(responsejson['choices'][0]['message']['content']));
         chatList = List.generate(
             responsejson['choices'].length,
             (index) => ChatModel(
-                content: responsejson['choices'][0]['message']['content'],
-                role: "assistant"
-              )
-          );
+                content: utf8convert(
+                    responsejson['choices'][0]['message']['content']),
+                role: "assistant"));
       }
       return chatList;
     } catch (e) {
@@ -49,9 +48,8 @@ class ApiService {
     }
   }
 
-  static Future<List<EditModel>> sendEditMessage({
-    required String message, required String instruction
-  }) async {
+  static Future<List<EditModel>> sendEditMessage(
+      {required String message, required String instruction}) async {
     try {
       log(message);
       var response = await http.post(Uri.parse("$BASE_URL/edits"),
@@ -59,19 +57,24 @@ class ApiService {
             'Authorization': 'Bearer $API_KEY',
             "Content-Type": "application/json"
           },
-          body: jsonEncode({"model": "text-davinci-edit-001", "input": message, "instruction": instruction}));
+          body: jsonEncode({
+            "model": "text-davinci-edit-001",
+            "input": message,
+            "instruction": instruction
+          }));
       Map responsejson = jsonDecode(response.body);
       if (responsejson['error'] != null) {
         throw HttpException(responsejson['error']['message']);
       }
+      utf8.decode(response.bodyBytes);
       List<EditModel> editList = [];
       if (responsejson['choices'].length > 0) {
-        log(responsejson['choices'][0]['text']);
+        log(utf8convert(responsejson['choices'][0]['text']));
         editList = List.generate(
             responsejson['choices'].length,
             (index) => EditModel(
                 instruction: instruction,
-                input: responsejson['choices'][0]['text'],
+                input: utf8convert(responsejson['choices'][0]['text']),
                 role: "assistant"));
       }
       return editList;
@@ -79,5 +82,10 @@ class ApiService {
       log("Error: $e");
       rethrow;
     }
+  }
+
+  static String utf8convert(String text) {
+    List<int> bytes = text.toString().codeUnits;
+    return utf8.decode(bytes);
   }
 }

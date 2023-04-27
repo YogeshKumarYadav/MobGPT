@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobgpt/providers/chat_provider.dart';
 import 'package:mobgpt/providers/edit_provider.dart';
-import 'package:mobgpt/providers/modes_providers.dart';
+import 'package:mobgpt/providers/mode_provider.dart';
 import 'package:mobgpt/screens/chat_screen.dart';
 import 'package:provider/provider.dart';
 import 'constants/constants.dart';

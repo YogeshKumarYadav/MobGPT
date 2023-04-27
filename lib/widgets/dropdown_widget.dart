@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:mobgpt/providers/modes_providers.dart';
 import 'package:mobgpt/screens/chat_screen.dart';
 import 'package:mobgpt/screens/edit_screen.dart';
 import 'package:mobgpt/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
 import '../constants/constants.dart';
+import '../providers/mode_provider.dart';
 import '../services/api_service.dart';
 
 class ModeDropDown extends StatefulWidget {

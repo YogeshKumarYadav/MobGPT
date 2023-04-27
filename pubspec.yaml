@@ -43,6 +43,9 @@ dependencies:
   cloud_firestore: ^4.5.2
   provider: ^6.0.5
   animated_text_kit: ^4.2.2
+  google_fonts: ^4.0.3
+  google_language_fonts: ^2.0.0
+  google_cloud_translation: ^0.0.3
 
 dev_dependencies:
   flutter_test:

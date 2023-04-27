@@ -11,7 +11,6 @@ import 'package:mobgpt/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
 import '../models/chat_model.dart';
 import '../providers/chat_provider.dart';
-import '../providers/modes_providers.dart';
 import '../services/services.dart';
 
 class ChatScreen extends StatefulWidget {
