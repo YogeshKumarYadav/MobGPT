@@ -46,6 +46,7 @@ dependencies:
   google_fonts: ^4.0.3
   google_language_fonts: ^2.0.0
   google_cloud_translation: ^0.0.3
+  file_picker: ^5.2.11
 
 dev_dependencies:
   flutter_test:

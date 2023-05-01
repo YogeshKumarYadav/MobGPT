@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mobgpt/screens/Image_screen.dart';
+import 'package:mobgpt/screens/audio_screen.dart';
 import 'package:mobgpt/screens/chat_screen.dart';
 import 'package:mobgpt/screens/edit_screen.dart';
 import 'package:mobgpt/widgets/text_widget.dart';
@@ -54,7 +55,10 @@ class _ModeDropDownState extends State<ModeDropDown> {
               }
               if(currentMode == "Customize Input") {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const EditScreen()));
-              } 
+              }
+              if(currentMode == "Audio Transcription") {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AudioScreen()));
+              }  
               if(currentMode == "Generate AI Image") {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const ImageScreen()));
               }              
