@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
-import 'package:mobgpt/constants/api_constants.dart';
 import 'package:mobgpt/models/audio_model.dart';
 import 'package:mobgpt/models/chat_model.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +12,12 @@ import '../providers/chat_provider.dart';
 
 class ApiService {
   static List<Map> allChats = [];
+  static String BASE_URL = 'https://api.openai.com/v1';
+  static String api_key = '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';
+
+  static void updateAPI({required String new_API}) {
+    api_key = new_API;
+  }
 
   static Future<List<ChatModel>> sendMessage({
     required String message,
@@ -22,7 +27,7 @@ class ApiService {
       allChats.add({"role": "user", "content": message});
       var response = await http.post(Uri.parse("$BASE_URL/chat/completions"),
           headers: {
-            'Authorization': 'Bearer $API_KEY',
+            'Authorization': 'Bearer $api_key',
             "Content-Type": "application/json"
           },
           body: jsonEncode({"model": "gpt-3.5-turbo", "messages": allChats}));
@@ -57,7 +62,7 @@ class ApiService {
       log(message);
       var response = await http.post(Uri.parse("$BASE_URL/edits"),
           headers: {
-            'Authorization': 'Bearer $API_KEY',
+            'Authorization': 'Bearer $api_key',
             "Content-Type": "application/json"
           },
           body: jsonEncode({
@@ -92,7 +97,7 @@ class ApiService {
       log(message);
       var response = await http.post(Uri.parse("$BASE_URL/images/generations"),
           headers: {
-            'Authorization': 'Bearer $API_KEY',
+            'Authorization': 'Bearer $api_key',
             "Content-Type": "application/json"
           },
           body: jsonEncode({"prompt": message, "n": 1, "size": size}));
@@ -124,9 +129,8 @@ class ApiService {
       var request = http.MultipartRequest(
           'POST', Uri.parse('https://api.openai.com/v1/audio/transcriptions'));
       request.fields.addAll({'model': 'whisper-1'});
-      request.files.add(await http.MultipartFile.fromPath(
-          'file', fileName));
-      request.headers.addAll({'Authorization': 'Bearer $API_KEY'});
+      request.files.add(await http.MultipartFile.fromPath('file', fileName));
+      request.headers.addAll({'Authorization': 'Bearer $api_key'});
 
       http.StreamedResponse streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
