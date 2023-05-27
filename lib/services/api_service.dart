@@ -13,10 +13,36 @@ import '../providers/chat_provider.dart';
 class ApiService {
   static List<Map> allChats = [];
   static String BASE_URL = 'https://api.openai.com/v1';
-  static String api_key = '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';
-
+  static String api_key = 'null';
   static void updateAPI({required String new_API}) {
     api_key = new_API;
+  }
+
+  static Future<bool> checkAPI({
+    required String api,
+  }) async {
+    try {
+      log(api);
+      var response = await http.get(
+        Uri.parse("$BASE_URL/models"),
+        headers: {
+          'Authorization': 'Bearer $api',
+          "Content-Type": "application/json"
+        },
+      );
+      Map responsejson = jsonDecode(response.body);
+      log(response.body);
+      if (responsejson['error'] != null) {
+        throw HttpException(responsejson['error']['message']);
+      }
+      if (responsejson['data'].length > 0) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      log("Error: $e");
+      return false;
+    }
   }
 
   static Future<List<ChatModel>> sendMessage({
