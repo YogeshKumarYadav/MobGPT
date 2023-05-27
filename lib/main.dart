@@ -5,6 +5,7 @@ import 'package:mobgpt/providers/edit_provider.dart';
 import 'package:mobgpt/providers/image_provider.dart';
 import 'package:mobgpt/providers/mode_provider.dart';
 import 'package:mobgpt/screens/chat_screen.dart';
+import 'package:mobgpt/sliding_widget.dart';
 import 'package:provider/provider.dart';
 import 'constants/constants.dart';
 
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
           )
         ),
         home: 
-          const ChatScreen(),
+          SliderWidget(),
         )
     );
   }
