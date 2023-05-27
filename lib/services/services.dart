@@ -17,17 +17,6 @@ class Services {
           return Padding(
               padding: const EdgeInsets.all(18.0),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: const [
-                //     Flexible(
-                //         child: Text("Choose Mode",
-                //             style:
-                //                 TextStyle(fontSize: 16, color: Colors.white))),
-                //     Flexible(flex: 2, child: ModeDropDown()),
-                //   ],
-                // ),
-                // const SizedBox(height: 20),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
