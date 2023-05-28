@@ -78,11 +78,11 @@ class _SliderWidgetState extends State<SliderWidget> {
                 onTap: (newIndex) {
                   setState(() {
                     pagecontroller.animateToPage(newIndex,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn);
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn);
                   });
                 }),
-          )
+            )
         : Scaffold(
             backgroundColor: cardColor,
             body: Padding(
@@ -91,13 +91,13 @@ class _SliderWidgetState extends State<SliderWidget> {
                   child: Column(
                     children: [
                       Image.asset(AssetsManager.appImage,
-                          height: 200, width: 200),
+                        height: 200, width: 200),
                       const SizedBox(height: 70.0),
                       Container(
                         decoration: BoxDecoration(
                           color: scaffoldBackgroundColor,
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
+                            const BorderRadius.all(Radius.circular(8.0)),
                         ),
                         padding: const EdgeInsets.all(16.0),
                         child: TextField(
@@ -105,7 +105,6 @@ class _SliderWidgetState extends State<SliderWidget> {
                           style: const TextStyle(color: Colors.white),
                           controller: textEditingController,
                           onSubmitted: (value) {
-                            // ApiService.checkAPI(api: textEditingController.text).then((value) => print("------------------------------------$value"));
                             ApiService.checkAPI(api: textEditingController.text).then((value) => {
                               if (value == true) {
                                 ApiService.updateAPI(new_API: textEditingController.text),
@@ -113,7 +112,7 @@ class _SliderWidgetState extends State<SliderWidget> {
                                 setState(() {
                                   api_key = textEditingController.text;
                                 }),
-                                SliderWidget()
+                                const SliderWidget()
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                                   content: TextWidget(
@@ -140,7 +139,7 @@ class _SliderWidgetState extends State<SliderWidget> {
                               setState(() {
                                 api_key = textEditingController.text;
                               }),
-                              SliderWidget()
+                              const SliderWidget()
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                                 content: TextWidget(
@@ -153,12 +152,14 @@ class _SliderWidgetState extends State<SliderWidget> {
                           });
                         },
                         child: const Text('Go GPT',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 15)),
+                          style:
+                            TextStyle(color: Colors.white, fontSize: 15)),
                       )
                     ],
                   ),
-                )));
+                )
+              )
+            );
   }
 
   void get_api_key() async {
