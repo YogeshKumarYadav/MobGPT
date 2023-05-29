@@ -18,6 +18,10 @@ class ApiService {
     api_key = new_API;
   }
 
+  static String getAPI() {
+    return api_key;
+  }
+
   static Future<bool> checkAPI({
     required String api,
   }) async {

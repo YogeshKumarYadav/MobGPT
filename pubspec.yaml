@@ -45,6 +45,8 @@ dependencies:
   google_cloud_translation: ^0.0.3
   file_picker: ^5.2.11
   shared_preferences: ^2.1.1
+  url_launcher: ^6.1.8
+  webview_flutter: ^4.2.1
 
 dev_dependencies:
   flutter_test:

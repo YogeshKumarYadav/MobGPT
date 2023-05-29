@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -11,8 +10,10 @@ import 'package:mobgpt/services/api_service.dart';
 import 'package:mobgpt/services/assets_manager.dart';
 import 'package:mobgpt/widgets/text_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'constants/constants.dart';
+import 'package:flutter/gestures.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SliderWidget extends StatefulWidget {
   const SliderWidget({super.key});
@@ -78,11 +79,11 @@ class _SliderWidgetState extends State<SliderWidget> {
                 onTap: (newIndex) {
                   setState(() {
                     pagecontroller.animateToPage(newIndex,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeIn);
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn);
                   });
                 }),
-            )
+          )
         : Scaffold(
             backgroundColor: cardColor,
             body: Padding(
@@ -91,13 +92,13 @@ class _SliderWidgetState extends State<SliderWidget> {
                   child: Column(
                     children: [
                       Image.asset(AssetsManager.appImage,
-                        height: 200, width: 200),
+                          height: 200, width: 200),
                       const SizedBox(height: 70.0),
                       Container(
                         decoration: BoxDecoration(
                           color: scaffoldBackgroundColor,
                           borderRadius:
-                            const BorderRadius.all(Radius.circular(8.0)),
+                              const BorderRadius.all(Radius.circular(8.0)),
                         ),
                         padding: const EdgeInsets.all(16.0),
                         child: TextField(
@@ -105,24 +106,34 @@ class _SliderWidgetState extends State<SliderWidget> {
                           style: const TextStyle(color: Colors.white),
                           controller: textEditingController,
                           onSubmitted: (value) {
-                            ApiService.checkAPI(api: textEditingController.text).then((value) => {
-                              if (value == true) {
-                                ApiService.updateAPI(new_API: textEditingController.text),
-                                set_api_key(textEditingController.text),
-                                setState(() {
-                                  api_key = textEditingController.text;
-                                }),
-                                const SliderWidget()
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                  content: TextWidget(
-                                    label: "This API key either Invalid or Expired!!!",
-                                  ),
-                                  backgroundColor: Colors.red,
-                                ))
-                              },
-                              textEditingController.clear(),
-                            });
+                            ApiService.checkAPI(api: textEditingController.text)
+                                .then((value) => {
+                                      if (value == true)
+                                        {
+                                          ApiService.updateAPI(
+                                              new_API:
+                                                  textEditingController.text),
+                                          set_api_key(
+                                              textEditingController.text),
+                                          setState(() {
+                                            api_key =
+                                                textEditingController.text;
+                                          }),
+                                          const SliderWidget()
+                                        }
+                                      else
+                                        {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: TextWidget(
+                                              label:
+                                                  "This API key either Invalid or Expired!!!",
+                                            ),
+                                            backgroundColor: Colors.red,
+                                          ))
+                                        },
+                                      textEditingController.clear(),
+                                    });
                           },
                           decoration: const InputDecoration.collapsed(
                               hintText: "OpenAI API key",
@@ -131,30 +142,57 @@ class _SliderWidgetState extends State<SliderWidget> {
                       ),
                       const SizedBox(height: 16.0),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 14, 169, 130)),
                         onPressed: () {
-                            ApiService.checkAPI(api: textEditingController.text).then((value) => {
-                            if (value == true) {
-                              ApiService.updateAPI(new_API: textEditingController.text),
-                              set_api_key(textEditingController.text),
-                              setState(() {
-                                api_key = textEditingController.text;
-                              }),
-                              const SliderWidget()
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                content: TextWidget(
-                                  label: "This API key either Invalid or Expired!!!",
-                                ),
-                                backgroundColor: Colors.red,
-                              ))
-                            },
-                            textEditingController.clear(),
-                          });
+                          ApiService.checkAPI(api: textEditingController.text)
+                              .then((value) => {
+                                    if (value == true)
+                                      {
+                                        ApiService.updateAPI(
+                                            new_API:
+                                                textEditingController.text),
+                                        set_api_key(textEditingController.text),
+                                        setState(() {
+                                          api_key = textEditingController.text;
+                                        }),
+                                        const SliderWidget()
+                                      }
+                                    else
+                                      {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: TextWidget(
+                                            label:
+                                                "This API key either Invalid or Expired!!!",
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ))
+                                      },
+                                    textEditingController.clear(),
+                                  });
                         },
                         child: const Text('Go GPT',
-                          style:
-                            TextStyle(color: Colors.white, fontSize: 15)),
-                      )
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 15)),
+                      ),
+                      const SizedBox(height: 70),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(text: 'Get your openai API key from  ', style: TextStyle(color: Colors.white)),
+                            TextSpan(
+                              text: 'here',
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 14, 169, 130),
+                                decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()..onTap = _launchURL,
+                            ),
+                            const TextSpan(text: '.'),
+                          ],
+                        ),
+                      ),  
+                      const SizedBox(height: 30)
                     ],
                   ),
                 )
@@ -164,10 +202,10 @@ class _SliderWidgetState extends State<SliderWidget> {
 
   void get_api_key() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? action = prefs.getString('api_key');
-    log(action.toString());
+    final String? key = prefs.getString('api_key');
+    ApiService.updateAPI(new_API: key.toString());
     setState(() {
-      api_key = action.toString();
+      api_key = key.toString();
     });
   }
 
@@ -175,4 +213,13 @@ class _SliderWidgetState extends State<SliderWidget> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('api_key', key);
   }
+
+  _launchURL() async {
+    Uri _url = Uri.parse('https://platform.openai.com/account/api-keys');
+    if (await canLaunchUrl(_url)) {
+      await launchUrl(_url, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch!!! Check your Internet connection. $_url';
+    }
+  }  
 }
