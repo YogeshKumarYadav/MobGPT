@@ -156,7 +156,7 @@ class _ChatScreenState extends State<ChatScreen> {
       log("Error: $e");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: TextWidget(
-          label: e.toString(),
+          label: ApiService.getAPI(),
         ),
         backgroundColor: Colors.red,
       ));

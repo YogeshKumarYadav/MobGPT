@@ -19,8 +19,7 @@ class Services {
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.black,
+                      backgroundColor: const Color.fromARGB(225, 14, 169, 130),
                       elevation: 2,
                       shadowColor: Colors.grey,
                     ),
@@ -28,13 +27,15 @@ class Services {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return UpdateAPIWidget();
+                          return const UpdateAPIWidget();
                         },
                       );
                     },
                     child: const Text("Change API",
-                        style: TextStyle(fontSize: 15, color: Colors.white)))
-              ]));
+                        style: TextStyle(fontSize: 15, color: Colors.white))
+                    )
+              ])
+            );
         });
   }
 }
@@ -58,7 +59,7 @@ class UpdateAPIWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              focusNode: focusnode,
+              autofocus: true,
               style: const TextStyle(color: Colors.white),
               controller: textEditingController,
               onSubmitted: (value) {
@@ -78,13 +79,21 @@ class UpdateAPIWidget extends StatelessWidget {
                   textEditingController.clear(),
                 });   
               },
-              decoration: const InputDecoration.collapsed(
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: const Color(0xFF444654),
                 hintText: "New API key",
-                hintStyle: TextStyle(color: Colors.white38)
+                hintStyle: const TextStyle(color: Colors.white38),
+                contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,
+                  ),
               ),
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 14, 169, 130)),
               onPressed: () {
                 ApiService.checkAPI(api: textEditingController.text).then((value) => {
                   if (value == true) {
