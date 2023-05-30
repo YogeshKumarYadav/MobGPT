@@ -136,13 +136,16 @@ class _SliderWidgetState extends State<SliderWidget> {
                                     });
                           },
                           decoration: const InputDecoration.collapsed(
-                              hintText: "OpenAI API key",
-                              hintStyle: TextStyle(color: Colors.white38)),
+                            hintText: "OpenAI API key",
+                            hintStyle: TextStyle(color: Colors.white38)
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16.0),
                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 14, 169, 130)),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromARGB(255, 14, 169, 130)),
                         onPressed: () {
                           ApiService.checkAPI(api: textEditingController.text)
                               .then((value) => {
@@ -176,28 +179,29 @@ class _SliderWidgetState extends State<SliderWidget> {
                                 TextStyle(color: Colors.white, fontSize: 15)),
                       ),
                       const SizedBox(height: 70),
-                      RichText(
+                        RichText(
                         text: TextSpan(
                           children: [
-                            const TextSpan(text: 'Get your openai API key from  ', style: TextStyle(color: Colors.white)),
+                            const TextSpan(
+                                text: 'Get your openai API key from  ',
+                                style: TextStyle(color: Colors.white)),
                             TextSpan(
                               text: 'here',
                               style: const TextStyle(
                                 color: Color.fromARGB(255, 14, 169, 130),
                                 decoration: TextDecoration.underline,
                               ),
-                              recognizer: TapGestureRecognizer()..onTap = _launchURL,
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = _launchURL,
                             ),
                             const TextSpan(text: '.'),
                           ],
                         ),
-                      ),  
+                      ),
                       const SizedBox(height: 30)
                     ],
                   ),
-                )
-              )
-            );
+                )));
   }
 
   void get_api_key() async {
@@ -216,10 +220,10 @@ class _SliderWidgetState extends State<SliderWidget> {
 
   _launchURL() async {
     Uri _url = Uri.parse('https://platform.openai.com/account/api-keys');
-    if (await canLaunchUrl(_url)) {
+    try {
       await launchUrl(_url, mode: LaunchMode.externalApplication);
-    } else {
+    } catch (e) {
       throw 'Could not launch!!! Check your Internet connection. $_url';
     }
-  }  
+  }
 }
